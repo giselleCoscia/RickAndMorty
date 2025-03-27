@@ -16,12 +16,13 @@ const $selectGender = $("#gender");
 const $selectTipo = $("#tipo");
 let page = 1;
 let totalPage;
+let isCharacter = true;
 
 
 
 const getPage = async () => {
     const apiPage = await fetch(
-      `https://rickandmortyapi.com/api/character?page=${page}&name=${$inputSearch.value}&status=${$selectStatus.value}&gender=${$selectGender.value}&tipo=${$selectTipo.value}`
+      `https://rickandmortyapi.com/api/${isCharacter?"character":"episode"}?page=${page}&name=${$inputSearch.value}&status=${$selectStatus.value}&gender=${$selectGender.value}&tipo=${$selectTipo.value}`
     );
     const data = await apiPage.json();
     return data;
@@ -31,18 +32,18 @@ const drawData = (characters) => {
   
   $containerCards.innerHTML = "";
   for (const character of characters) {
-    $containerCards.innerHTML += `<div class="  bg-white rounded-lg overflow-hidden shadow-lg ">
-          <img
+    $containerCards.innerHTML += `<div id="imC" class="  bg-white rounded-lg overflow-hidden shadow-lg ">
+          ${isCharacter?`<img id="imgCard"
             src="${character.image}"
             alt="Portada"
             class=" w-full h-64 object-cover"
-          />
+          />`:""}
           <div class="p-4">
             <h3 class="text-xl font-bold text-gray-800 mb-2">
              ${character.name}
             </h3>
-            <p class="text-gray-600 mb-4">${character.gender}</p>
-            <p class="text-gray-600 mb-4">${character.status}</p>
+            <p class="text-gray-600 mb-4">${isCharacter?character.gender:character.episode}</p>
+             ${isCharacter?`<p class="text-gray-600 mb-4">${character.status}</p>`:""}
             <div class="flex justify-between items-center">
               <button
                 class="bg-lime-400 hover:bg-lime-500 text-white px-3 py-1 rounded-md text-sm font-medium"
@@ -113,19 +114,14 @@ $selectGender.addEventListener("change", async () => {
     }}
 );                                                          
 $selectTipo.addEventListener("change", async () => {
-    try{
-        if($selectTipo.value === "character"){
+        isCharacter = !isCharacter;
         updateView();
-    }else if($selectTipo.value === "episode"){
-      const episode = await fetch("https://rickandmortyapi.com/api/episode");
-        const data = await episode.json();
-        drawData(data.results);
-
-    } 
-    } catch (error){
-        console.log(error);     
-    }}          
+        $selectStatus.style.display = isCharacter ? "block" : "none";
+        $selectGender.style.display = isCharacter ? "block" : "none";
+   }          
 );  
+
+
 // const infoRick = [
 //     {
 //         "id": 1,
