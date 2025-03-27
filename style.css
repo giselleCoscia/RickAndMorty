@@ -1,0 +1,13 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f0f0f0;
+  }
+  h1, h2, h3 {
+    font-family: 'Bangers', cursive;
+  }
+  .comic-card {
+    transition: transform 0.3s ease;
+  }
+  .comic-card:hover {
+    transform: scale(1.05);
+  }

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ADA COMICS - Tu tienda de cómics favorita</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Kdam+Thmor+Pro&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/js-md5@0.8.3/src/md5.min.js"></script>
+  </head>
+  <body>
+    <header class="w-full bg-black">
+      <nav class="container mx-auto px-4 py-3">
+        <div class="flex justify-center">
+          <h1
+            class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white bg-red-600 px-4 py-2 rounded-md shadow-lg"
+          >
+            ADA COMICS
+          </h1>
+        </div>
+      </nav>
+      <div class="w-full">
+        <img
+          class="  w-full h-[300px] md:h-[400px] lg:h-[490px]"
+          src="./img/Frame 1.jpg"
+          alt="Banner principal de Ada Comics"
+        />
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <h1 class="text-4xl md:text-5xl text-center mb-8 text-red-600 uppercase">
+        Explora Nuestro Catálogo
+      </h1>
+      <div class="bg-white p-6 rounded-lg shadow-md mb-10">
+        <div class=" flex flex-row py-4">
+            <select
+              name="Tipo"
+              id="tipo"
+              class="w-32 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              <option value="">Personajes</option>
+              <option value="">Episodios</option>
+            </select>
+           <div class=" px-8">
+            <select name="Orden" id="orden"class="w-24 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+                <option value="">Status</option>
+                <option value="">Genero</option>
+              </select>
+           </div> 
+          </div>
+        <div class=" w-full ">
+          <div class=  flex flex-row " >
+            <input
+            id="inputSearch"
+              type="text"
+              placeholder="Ingresa Tu Busqueda..."
+              class=" w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            /> 
+           <div class=" px-8 ">
+            <button id="buttonSearch"
+              class="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-md font-bold transition-colors"
+            >
+              Buscar
+            </button>
+           </div>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="text-3xl font-bold mb-4 text-gray-800">Resultados</h1>
+      <h2 class="text-xl text-gray-600 mb-6">
+        Encontramos estos títulos para ti
+      </h2>
+     <div id="containerCards" class="  inline-grid lg:grid-cols-6 gap-4 sm:grid-cols-2 "></div>
+  
+      <!-- Paginación -->
+      <div class="flex justify-center mt-8">
+        <div class="flex space-x-2">
+          <a
+            href="#"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+            >Anterior</a
+          >
+          <a href="#" class="px-4 py-2 bg-red-600 text-white rounded-md">1</a>
+          <a
+            href="#"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+            >2</a
+          >
+          <a
+            href="#"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+            >3</a
+          >
+          <a
+            href="#"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+            >Siguiente</a
+          >
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-2xl mb-4">ADA COMICS</h3>
+            <p class="text-gray-400">
+              Tu tienda especializada en cómics, manga y novela gráfica. Más de
+              10 años compartiendo historias asombrosas.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl mb-4">Contáctanos</h3>
+            <p class="text-gray-400">Calle Falsa #123, Ciudad</p>
+            <p class="text-gray-400">info@adacomics.com</p>
+            <p class="text-gray-400">+15 234234</p>
+          </div>
+          <div class="flex flex-row scale-125">
+            <img class="w-36  " src="./img/imFooter.png" alt="">
+          </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-6 text-center">
+          <p class="text-gray-400">
+            © 2025 ADA COMICS. Todos los derechos reservados. Giselle Rodriguez Coscia
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./main.js"></script>
+  </body>
+</html>
