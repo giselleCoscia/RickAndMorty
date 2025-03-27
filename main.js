@@ -11,7 +11,9 @@ const $backPage = $("#backPage");
 const $nextPage = $("#nextPage");
 const $containerCards = $("#containerCards");
 const $numberPage = $("#numberPage");
-
+const $selectStatus = $("#status");
+const $selectGender = $("#gender");
+const $selectTipo = $("#tipo");
 let page = 1;
 let totalPage;
 
@@ -19,7 +21,7 @@ let totalPage;
 
 const getPage = async () => {
     const apiPage = await fetch(
-      `https://rickandmortyapi.com/api/character?page=${page}&name=${$inputSearch.value}`
+      `https://rickandmortyapi.com/api/character?page=${page}&name=${$inputSearch.value}&status=${$selectStatus.value}&gender=${$selectGender.value}&tipo=${$selectTipo.value}`
     );
     const data = await apiPage.json();
     return data;
@@ -95,6 +97,35 @@ $buttonSearch.addEventListener("click", async () => {
     updateView();
 }); 
 
+$selectStatus.addEventListener("change", async () => {
+try{
+    updateView();
+} catch (error){
+    console.log(error);
+    }}
+);
+
+$selectGender.addEventListener("change", async () => {
+    try{
+        updateView();   
+    } catch (error){
+        console.log(error);
+    }}
+);                                                          
+$selectTipo.addEventListener("change", async () => {
+    try{
+        if($selectTipo.value === "character"){
+        updateView();
+    }else if($selectTipo.value === "episode"){
+      const episode = await fetch("https://rickandmortyapi.com/api/episode");
+        const data = await episode.json();
+        drawData(data.results);
+
+    } 
+    } catch (error){
+        console.log(error);     
+    }}          
+);  
 // const infoRick = [
 //     {
 //         "id": 1,
