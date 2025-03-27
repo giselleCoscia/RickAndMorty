@@ -2,26 +2,34 @@
 // "locations": "https://rickandmortyapi.com/api/location",
 // "episodes": "https://rickandmortyapi.com/api/episode"/
 
-
 const $ = (element) => document.querySelector(element);
 const $$ = (element) => document.querySelectorAll(element);
 
-const $inputSearch = $("#inputSearch")
-const $buttonSearch = $("#buttonSearch")
+const $inputSearch = $("#inputSearch");
+const $buttonSearch = $("#buttonSearch");
+const $backPage = $("#backPage");
+const $nextPage = $("#nextPage");
+const $containerCards = $("#containerCards");
+const $numberPage = $("#numberPage");
+
+let page = 1;
+let totalPage;
 
 
-const callApi = async () =>{
-    const response = await fetch('https://rickandmortyapi.com/api/character')
-    const data = await response.json()
-    return data
-}
+
+const getPage = async () => {
+    const apiPage = await fetch(
+      `https://rickandmortyapi.com/api/character?page=${page}&name=${$inputSearch.value}`
+    );
+    const data = await apiPage.json();
+    return data;
+};
 
 const drawData = (characters) => {
-    const $containerCards = $("#containerCards");
-    $containerCards.innerHTML = ""
-    for (const character of characters) {
-        
-        $containerCards.innerHTML +=`<div class="  bg-white rounded-lg overflow-hidden shadow-lg ">
+  
+  $containerCards.innerHTML = "";
+  for (const character of characters) {
+    $containerCards.innerHTML += `<div class="  bg-white rounded-lg overflow-hidden shadow-lg ">
           <img
             src="${character.image}"
             alt="Portada"
@@ -41,20 +49,51 @@ const drawData = (characters) => {
               </button>
             </div>
           </div>
-        </div>`
-    }
+        </div>`;
+  }
+};
+
+const updateView = async ()=>{
+    const data = await getPage();
+    drawData(data.results);
+    totalPage = data.info.pages;
+    $numberPage.innerHTML = page;
 }
 
-const init = async() => {
-    const data = await callApi();
-    drawData(data.results);
-    
-}
+const init = () => {
+    updateView()
+};
 
 init();
 
 
+$nextPage.addEventListener("click", () => {
+  $containerCards.innerHTML = "";
+  $containerCards.innerHTML = `<h1>Loading...</h1>`;
+  page += 1;
+  updateView();
+  if(page == totalPage){
+    $nextPage.disabled = true;
+  } else if (page > 1){
+    $backPage.disabled = false;
+  }         
+  
+});
 
+$backPage.addEventListener("click", () => { 
+    $containerCards.innerHTML = "";
+    $containerCards.innerHTML = `<h1>Loading...</h1>`;
+    page -= 1;
+    updateView();
+    if(page === 1){
+        $backPage.disabled = true;
+    }
+}); 
+
+$buttonSearch.addEventListener("click", async () => {
+    page = 1;
+    updateView();
+}); 
 
 // const infoRick = [
 //     {

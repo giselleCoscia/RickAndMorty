@@ -3,8 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ADA COMICS - Tu tienda de cómics favorita</title>
+    <title>Rick&Morty - Tu Buscador favorito</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Creepster&family=Kdam+Thmor+Pro&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,23 +22,23 @@
       <nav class="container mx-auto px-4 py-3">
         <div class="flex justify-center">
           <h1
-            class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white bg-red-600 px-4 py-2 rounded-md shadow-lg"
+            class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white bg-lime-400 px-4 py-2 rounded-md shadow-lg"
           >
-            ADA COMICS
+          Rick&Morty
           </h1>
         </div>
       </nav>
       <div class="w-full">
         <img
           class="  w-full h-[300px] md:h-[400px] lg:h-[490px]"
-          src="./img/Frame 1.jpg"
+          src="./img/rick-and-morty-en-nave-4518.webp"
           alt="Banner principal de Ada Comics"
         />
       </div>
     </header>
 
     <main class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl md:text-5xl text-center mb-8 text-red-600 uppercase">
+      <h1 class="text-4xl md:text-5xl text-center mb-8 text-lime-400 uppercase">
         Explora Nuestro Catálogo
       </h1>
       <div class="bg-white p-6 rounded-lg shadow-md mb-10">
@@ -43,13 +46,13 @@
             <select
               name="Tipo"
               id="tipo"
-              class="w-32 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+              class="w-36 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-300"
             >
               <option value="">Personajes</option>
               <option value="">Episodios</option>
             </select>
            <div class=" px-8">
-            <select name="Orden" id="orden"class="w-24 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+            <select name="Orden" id="orden"class="w-32 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-300">
                 <option value="">Status</option>
                 <option value="">Genero</option>
               </select>
@@ -61,11 +64,11 @@
             id="inputSearch"
               type="text"
               placeholder="Ingresa Tu Busqueda..."
-              class=" w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+              class=" w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-300"
             /> 
            <div class=" px-8 ">
             <button id="buttonSearch"
-              class="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-md font-bold transition-colors"
+              class="bg-lime-400 hover:bg-lime-500 text-white px-8 py-2 rounded-md font-bold transition-colors"
             >
               Buscar
             </button>
@@ -80,29 +83,19 @@
       </h2>
      <div id="containerCards" class="  inline-grid lg:grid-cols-6 gap-4 sm:grid-cols-2 "></div>
   
-      <!-- Paginación -->
       <div class="flex justify-center mt-8">
         <div class="flex space-x-2">
-          <a
-            href="#"
-            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-            >Anterior</a
+          <button id="backPage"
+          disabled
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:hover:bg-gray-200 disabled:cursor-not-allowed"
+            >Anterior</button
           >
-          <a href="#" class="px-4 py-2 bg-red-600 text-white rounded-md">1</a>
-          <a
-            href="#"
-            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-            >2</a
-          >
-          <a
-            href="#"
-            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-            >3</a
-          >
-          <a
-            href="#"
-            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-            >Siguiente</a
+          <button id="numberPage" class="px-4 py-2 bg-lime-500 text-white rounded-md">1</button>
+          
+          <button
+          id="nextPage"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:hover:bg-gray-200 disabled:cursor-not-allowed"
+            >Siguiente</button
           >
         </div>
       </div>
@@ -110,28 +103,29 @@
 
     <!-- Footer -->
     <footer class="bg-black text-white py-8">
-      <div class="container mx-auto px-4">
+      <div class="container mx-auto px-4 ">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 class="text-2xl mb-4">ADA COMICS</h3>
+            <h3 class="text-2xl mb-4">ADA TP</h3>
             <p class="text-gray-400">
-              Tu tienda especializada en cómics, manga y novela gráfica. Más de
-              10 años compartiendo historias asombrosas.
+              "Escucha, Morty... la programación no se trata de hacerlo bien,
+               se trata de hacerlo funcionar antes de la entrega"
             </p>
+            <p>Rick Sanchez.</p>
           </div>
           <div>
             <h3 class="text-xl mb-4">Contáctanos</h3>
             <p class="text-gray-400">Calle Falsa #123, Ciudad</p>
-            <p class="text-gray-400">info@adacomics.com</p>
+            <p class="text-gray-400">info@WubbaLubbadubdub.com</p>
             <p class="text-gray-400">+15 234234</p>
           </div>
           <div class="flex flex-row scale-125">
-            <img class="w-36  " src="./img/imFooter.png" alt="">
+            <img class="w-36  " src="./img/image 13.png" alt="">
           </div>
         </div>
         <div class="border-t border-gray-800 mt-8 pt-6 text-center">
           <p class="text-gray-400">
-            © 2025 ADA COMICS. Todos los derechos reservados. Giselle Rodriguez Coscia
+            © 2025 Rick and Morty. Todos los derechos reservados. Giselle Rodriguez Coscia
           </p>
         </div>
       </div>
