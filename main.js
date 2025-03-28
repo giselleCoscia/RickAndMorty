@@ -14,6 +14,7 @@ const $numberPage = $("#numberPage");
 const $selectStatus = $("#status");
 const $selectGender = $("#gender");
 const $selectTipo = $("#tipo");
+const $detail = $("#detail");
 let page = 1;
 let totalPage;
 let isCharacter = true;
@@ -29,13 +30,20 @@ const getPage = async () => {
     const data = await apiPage.json();
     return data;
 };
+getCharacter = async (id) => {
+  const apiPage = await fetch(`https://rickandmortyapi.com/api/character/${id}`);   
+  const data = await apiPage.json();
+  return data;
+} 
+
+
 
 const drawData = (characters) => {
   
   $containerCards.innerHTML = "";
   for (const character of characters) {
-    $containerCards.innerHTML += `<div id="imC" class="  bg-white rounded-lg overflow-hidden shadow-lg ">
-          ${isCharacter?`<img id="imgCard"
+    $containerCards.innerHTML += `<div class="bg-white rounded-lg overflow-hidden shadow-lg ">
+          ${isCharacter?`<img
             src="${character.image}"
             alt="Portada"
             class=" w-full h-64 object-cover"
@@ -44,17 +52,51 @@ const drawData = (characters) => {
             <h3 class="text-xl font-bold text-gray-800 mb-2">
              ${character.name}
             </h3>
-            <p class="text-gray-600 mb-4">${isCharacter?character.gender:character.episode}</p>
-             ${isCharacter?`<p class="text-gray-600 mb-4">${character.status}</p>`:""}
+            <p class="text-gray-600 mb-4">${isCharacter ? character.gender : character.episode}</p>
+    ${isCharacter ? `<p class="mb-4 font-semibold ${character.status === "Alive" ? "text-green-500" : character.status === "Dead" ? "text-red-500" : "text-gray-500"}">
+      ${character.status}
+    </p>` : ""}
             <div class="flex justify-between items-center">
-              <button
-                class="bg-lime-400 hover:bg-lime-500 text-white px-3 py-1 rounded-md text-sm font-medium"
+              <button 
+                data-id=${character.id}
+                class="buttonCard bg-lime-400 hover:bg-lime-500 text-white px-3 py-1 rounded-md text-sm font-medium"
               >
                Ver Mas
               </button>
             </div>
           </div>
         </div>`;
+        const $main = $("#main")
+        $containerCards.querySelectorAll(".buttonCard").forEach((button, index) => {
+            button.addEventListener("click", async (e) => {
+              
+                $main.style.display = "none";
+                const id = e.target.dataset.id;
+                $detail.style.display = "block";
+                $detail.innerHTML = `<h1 class="text-2xl font-bold text-gray-800 mb-4">Loading...</h1>`;
+                const character = await getCharacter(id);
+                $detail.innerHTML = `
+                 <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg">
+          <img src="${character.image}" alt="">
+          <p class="text-3xl font-bold mb-4 text-gray-200">Detalles</p>
+          <p class="text-xl text-gray-200 mb-6">Nombre: ${character.name}</p>
+          <p class="text-xl text-gray-200 mb-6">Especie: ${character.species}</p>
+          <p class="mb-4 font-semibold ${character.status === "Alive" ? "text-green-500" : character.status === "Dead" ? "text-red-500" : "text-gray-500"}">
+      ${character.status} </p>
+          <p class="text-xl text-gray-200 mb-6">Origen: ${character.origin.name}</p>
+          <p class="text-xl text-gray-200 mb-6">Ubicación: ${character.location.name}</p>
+          <p class="text-xl text-gray-200 mb-6">Aparicion: ${
+            character.episode.map((episode) => "E" + episode.split("/").pop()).join(", ")
+          }</p>
+          <button id="closeDetail" class="mt-4 px-4 py-2 bg-lime-400 text-white rounded">Volver</button>
+        </div>  `
+         $("#closeDetail").addEventListener("click", () => {
+          $detail.style.display = "none";
+          $main.style.display = "block";
+        
+        })
+
+        })});
   }
 };
 
@@ -103,14 +145,13 @@ $buttonSearch.addEventListener("click", async () => {
 $selectStatus.addEventListener("change",updateView);
 $selectGender.addEventListener("change", updateView);  
 
-$selectTipo.addEventListener("change", async () => {
+$selectTipo.addEventListener("change",  () => {
         isCharacter = !isCharacter;
         updateView();
         $selectStatus.style.display = isCharacter ? "block" : "none";
         $selectGender.style.display = isCharacter ? "block" : "none";
    }          
 );  
-
 
 // const infoRick = [
 //     {
