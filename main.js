@@ -21,8 +21,10 @@ let isCharacter = true;
 
 
 const getPage = async () => {
+    const gender = $selectGender.value?`&gender=${$selectGender.value}`:"";
+    const status = $selectStatus.value?`&status=${$selectStatus.value}`:"";
     const apiPage = await fetch(
-      `https://rickandmortyapi.com/api/${isCharacter?"character":"episode"}?page=${page}&name=${$inputSearch.value}&status=${$selectStatus.value}&gender=${$selectGender.value}&tipo=${$selectTipo.value}`
+      `https://rickandmortyapi.com/api/${isCharacter?"character":"episode"}?page=${page}&name=${$inputSearch.value}&tipo=${$selectTipo.value}${gender}${status}`
     );
     const data = await apiPage.json();
     return data;
@@ -98,21 +100,9 @@ $buttonSearch.addEventListener("click", async () => {
     updateView();
 }); 
 
-$selectStatus.addEventListener("change", async () => {
-try{
-    updateView();
-} catch (error){
-    console.log(error);
-    }}
-);
+$selectStatus.addEventListener("change",updateView);
+$selectGender.addEventListener("change", updateView);  
 
-$selectGender.addEventListener("change", async () => {
-    try{
-        updateView();   
-    } catch (error){
-        console.log(error);
-    }}
-);                                                          
 $selectTipo.addEventListener("change", async () => {
         isCharacter = !isCharacter;
         updateView();
