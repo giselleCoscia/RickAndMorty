@@ -17,3 +17,15 @@ body {
     font-style: normal;
   }
   
+  @keyframes rotar-infinito {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .rotacion-infinita {
+    animation: rotar-infinito 20s linear infinite;
+  }

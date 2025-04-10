@@ -15,6 +15,7 @@ const $selectStatus = $("#status");
 const $selectGender = $("#gender");
 const $selectTipo = $("#tipo");
 const $detail = $("#detail");
+const $main = $("#main");
 let page = 1;
 let totalPage;
 let isCharacter = true;
@@ -104,45 +105,12 @@ const drawData = (characters) => {
             </div>
           </div>
         </div>`;
-    const $main = $("#main");
+  
     $containerCards.querySelectorAll(".buttonCard").forEach((button, index) => {
       button.addEventListener("click", async (e) => {
         if (isCharacter) {
-          $main.style.display = "none";
-          $detail.style.display = "block";
           const id = e.target.dataset.id;
-          $detail.innerHTML = `<h1 class="text-2xl font-bold text-gray-800 mb-4">Loading...</h1>`;
-          const character = await getCharacter(id);
-          $detail.innerHTML = `<div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg">
-           <img src="${character.image}" alt="">
-           <p class="text-3xl font-bold mb-4 text-gray-200">Detalles</p>
-           <p class="text-xl text-gray-200 mb-6">Nombre: ${character.name}</p>
-           <p class="text-xl text-gray-200 mb-6">Especie: ${
-             character.species
-           }</p>
-           <p class="mb-4 font-semibold ${
-             character.status === "Alive"
-               ? "text-green-500"
-               : character.status === "Dead"
-               ? "text-red-500"
-               : "text-gray-500"
-           }">
-       ${character.status} </p>
-           <p class="text-xl text-gray-200 mb-6">Origen: ${
-             character.origin.name
-           }</p>
-           <p class="text-xl text-gray-200 mb-6">Ubicación: ${
-             character.location.name
-           }</p>
-           <p class="text-xl text-gray-200 mb-6">Aparicion: ${character.episode
-             .map((episode) => "E" + episode.split("/").pop())
-             .join(", ")}</p>
-           <button id="closeDetail" class="mt-4 px-4 py-2 bg-lime-400 text-white rounded">Volver</button>
-         </div>  `;
-          $("#closeDetail").addEventListener("click", () => {
-            $detail.style.display = "none";
-            $main.style.display = "block";
-          });
+          showCharacterDetail(id);
         }
         if (!isCharacter) {
           {
@@ -160,9 +128,10 @@ const drawData = (characters) => {
            <p class="text-xl text-gray-200 mb-6">Fecha de emision: ${episode.air_date}</p>
             <p class="text-xl text-gray-200 mb-6">Episodio: ${episode.episode}</p>
            <p class="text-xl text-gray-200 mb-6">
-  Aparición:<ul>${characters.map((character) => `<li>${character.name} <img src="${character.image}"/></li>`).join("")}</ul>
+  Aparición: ${charactersCarrousel(characters)}
+  
            </p>
-            </ul>
+            </div>
 </p>
 
            <button id="closeDetail" class="mt-4 px-4 py-2 bg-lime-400 text-white rounded">Volver</button>
@@ -177,6 +146,65 @@ const drawData = (characters) => {
       });
     });
   }
+};
+
+const showCharacterDetail = async(id)=>{
+  $main.style.display = "none";
+  $detail.style.display = "block";
+  $detail.innerHTML = `<h1 class="text-2xl font-bold text-gray-800 mb-4">Loading...</h1>`;
+  const character = await getCharacter(id);
+  $detail.innerHTML = `<div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg">
+   <img src="${character.image}" alt="">
+   <p class="text-3xl font-bold mb-4 text-gray-200">Detalles</p>
+   <p class="text-xl text-gray-200 mb-6">Nombre: ${character.name}</p>
+   <p class="text-xl text-gray-200 mb-6">Especie: ${
+     character.species
+   }</p>
+   <p class="mb-4 font-semibold ${
+     character.status === "Alive"
+       ? "text-green-500"
+       : character.status === "Dead"
+       ? "text-red-500"
+       : "text-gray-500"
+   }">
+${character.status} </p>
+   <p class="text-xl text-gray-200 mb-6">Origen: ${
+     character.origin.name
+   }</p>
+   <p class="text-xl text-gray-200 mb-6">Ubicación: ${
+     character.location.name
+   }</p>
+   <p class="text-xl text-gray-200 mb-6">Aparicion: ${character.episode
+     .map((episode) => "E" + episode.split("/").pop())
+     .join(", ")}</p>
+   <button id="closeDetail" class="mt-4 px-4 py-2 bg-lime-400 text-white rounded">Volver</button>
+ </div>  `;
+  $("#closeDetail").addEventListener("click", () => {
+    $detail.style.display = "none";
+    $main.style.display = "block";
+  });
+}
+const charactersCarrousel = (characters) => {
+  let carrousel = `
+    <div class="flex transition-transform duration-300 ease-in-out space-x-4 overflow-x-auto p-4 bg-gray-100 rounded-lg shadow-lg">
+  `;
+
+  for (const character of characters) {
+    carrousel += `
+      <div class="flex-shrink-0 w-28 text-center transition-transform duration-300 ease-in-out hover:scale-110 cursor-pointer" onclick="showCharacterDetail(${character.id})">
+        <img 
+          src="${character.image}" 
+          alt="${character.name}" 
+          class="w-24 h-24 object-cover rounded-lg mx-auto" 
+        />
+        <p class="text-sm font-semibold mt-2 text-gray-800">${character.name}</p>
+        <p class="text-sm text-gray-600">${character.status}</p>
+      </div>
+    `;
+  }
+
+  carrousel += `</div>`;
+  return carrousel;
 };
 const updateView = async () => {
   const data = await getPage();
@@ -227,3 +255,53 @@ $selectTipo.addEventListener("change", () => {
   $selectStatus.style.display = isCharacter ? "block" : "none";
   $selectGender.style.display = isCharacter ? "block" : "none";
 });
+
+
+
+const NUM_GATOS = 30;
+const gatos = [];
+
+for (let i = 0; i < NUM_GATOS; i++) {
+  const gato = document.createElement("img");
+  gato.src = `./img/gato${Math.floor(Math.random() * 2) + 1}.png`;
+  gato.className = "absolute cursor-pointer rotacion-infinita";
+  
+  const tamaño = Math.floor(Math.random() * 160) + 40;
+
+  gato.style.zIndex = tamaño >= 130 ? 1 : -1;
+  gato.style.width = `${tamaño}px`;
+
+  const x = Math.random() * (window.innerWidth - tamaño);
+  const y = Math.random() * (window.innerHeight - tamaño);
+
+  const vx = (Math.random()  + 0.1) * (Math.random() < 0.5 ? 1 : -1);
+  const vy = (Math.random()  + 0.1) * (Math.random() < 0.5 ? 1 : -1);
+
+  document.body.appendChild(gato);
+
+  gatos.push({ el: gato, x, y, vx, vy, tamaño });
+}
+
+
+function moverGatos() {
+  const ancho = window.innerWidth - 20;
+  const alto = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight
+  );
+
+  gatos.forEach(gato => {
+    gato.x += gato.vx;
+    gato.y += gato.vy;
+
+    if (gato.x <= 0 || gato.x + gato.tamaño >= ancho) gato.vx *= -1;
+    if (gato.y <= 0 || gato.y + gato.tamaño >= alto) gato.vy *= -1;
+
+    gato.el.style.left = `${gato.x}px`;
+    gato.el.style.top = `${gato.y}px`;
+  });
+
+  requestAnimationFrame(moverGatos);
+}
+
+moverGatos();
