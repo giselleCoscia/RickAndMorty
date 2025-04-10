@@ -35,10 +35,10 @@ const getPage = async () => {
 };
 
 const getCharacter = async (id) => {
-  // let character = localStorage.getItem("charcater-" + id);
-  // if (character) {
-  //   return JSON.parse(character);
-  // }
+  let character = localStorage.getItem("charcater-" + id);
+  if (character) {
+    return JSON.parse(character);
+  }
   const apiPage = await fetch(
     `https://rickandmortyapi.com/api/character/${id}`
   );
