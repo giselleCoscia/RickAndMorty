@@ -35,33 +35,29 @@ const getPage = async () => {
 };
 
 const getCharacter = async (id) => {
-  let character = localStorage.getItem("charcater-"+id);
-  if (character) {
-    return JSON.parse(character);
-  }
+  // let character = localStorage.getItem("charcater-" + id);
+  // if (character) {
+  //   return JSON.parse(character);
+  // }
   const apiPage = await fetch(
     `https://rickandmortyapi.com/api/character/${id}`
   );
   const data = await apiPage.json();
-  localStorage.setItem("charcater-"+id, JSON.stringify(data));
+  // localStorage.setItem("charcater-" + id, JSON.stringify(data));
   return data;
 };
 
 const getCharactersUrls = async (urls) => {
   const ids = urls.map((url) => url.split("/").slice(-1)[0]);
-  const characters = await Promise.all(
-    ids.map((id) => getCharacter(id))
-  );
+  const characters = await Promise.all(ids.map((id) => getCharacter(id)));
   return characters;
-}
+};
+
 const getEpisode = async (id) => {
-  const apiPage = await fetch(
-    `https://rickandmortyapi.com/api/episode/${id}`
-  );
+  const apiPage = await fetch(`https://rickandmortyapi.com/api/episode/${id}`);
   const data = await apiPage.json();
   return data;
-}
-
+};
 
 const drawData = (characters) => {
   $containerCards.innerHTML = "";
@@ -105,50 +101,50 @@ const drawData = (characters) => {
             </div>
           </div>
         </div>`;
-  
+
     $containerCards.querySelectorAll(".buttonCard").forEach((button, index) => {
       button.addEventListener("click", async (e) => {
+        const id = e.target.dataset.id;
         if (isCharacter) {
-          const id = e.target.dataset.id;
-          showCharacterDetail(id);
+          await showCharacterDetail(id);
         }
         if (!isCharacter) {
-          {
-            
-            $main.style.display = "none";
-            $detail.style.display = "block";
-            const id = e.target.dataset.id;
-            $detail.innerHTML = `<h1 class="text-2xl font-bold text-gray-800 mb-4">Loading...</h1>`;
-            const episode = await getEpisode(id);
-            const characters = await getCharactersUrls(episode.characters);
-
-            $detail.innerHTML = `<div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg">
-           <p class="text-3xl font-bold mb-4 text-gray-200">Detalles</p>
-           <p class="text-xl text-gray-200 mb-6">Nombre: ${episode.name}</p>
-           <p class="text-xl text-gray-200 mb-6">Fecha de emision: ${episode.air_date}</p>
-            <p class="text-xl text-gray-200 mb-6">Episodio: ${episode.episode}</p>
-           <p class="text-xl text-gray-200 mb-6">
-  Aparición: ${charactersCarrousel(characters)}
-  
-           </p>
-            </div>
-</p>
-
-           <button id="closeDetail" class="mt-4 px-4 py-2 bg-lime-400 text-white rounded">Volver</button>
-         </div>  `;
-          $("#closeDetail").addEventListener("click", () => {
-            $detail.style.display = "none";
-            $main.style.display = "block";
-          });
-
-          }
+          await showEpisodeDetail(id);
         }
       });
     });
   }
 };
 
-const showCharacterDetail = async(id)=>{
+const showEpisodeDetail = async (id) => {
+  $main.style.display = "none";
+  $detail.style.display = "block";
+
+  $detail.innerHTML = `<h1 class="text-2xl font-bold text-gray-800 mb-4">Loading...</h1>`;
+  const episode = await getEpisode(id);
+  const characters = await getCharactersUrls(episode.characters);
+
+  $detail.innerHTML = `<div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg">
+ <p class="text-3xl font-bold mb-4 text-gray-200">Detalles</p>
+ <p class="text-xl text-gray-200 mb-6">Nombre: ${episode.name}</p>
+ <p class="text-xl text-gray-200 mb-6">Fecha de emision: ${episode.air_date}</p>
+  <p class="text-xl text-gray-200 mb-6">Episodio: ${episode.episode}</p>
+ <p class="text-xl text-gray-200 mb-6">
+   Aparición: ${charactersCarrousel(characters)}
+
+  </p>
+  </div>
+</p>
+
+ <button id="closeDetail" class="mt-4 px-4 py-2 bg-lime-400 text-white rounded">Volver</button>
+</div>  `;
+  $("#closeDetail").addEventListener("click", () => {
+    $detail.style.display = "none";
+    $main.style.display = "block";
+  });
+};
+
+const showCharacterDetail = async (id) => {
   $main.style.display = "none";
   $detail.style.display = "block";
   $detail.innerHTML = `<h1 class="text-2xl font-bold text-gray-800 mb-4">Loading...</h1>`;
@@ -157,9 +153,7 @@ const showCharacterDetail = async(id)=>{
    <img src="${character.image}" alt="">
    <p class="text-3xl font-bold mb-4 text-gray-200">Detalles</p>
    <p class="text-xl text-gray-200 mb-6">Nombre: ${character.name}</p>
-   <p class="text-xl text-gray-200 mb-6">Especie: ${
-     character.species
-   }</p>
+   <p class="text-xl text-gray-200 mb-6">Especie: ${character.species}</p>
    <p class="mb-4 font-semibold ${
      character.status === "Alive"
        ? "text-green-500"
@@ -168,22 +162,23 @@ const showCharacterDetail = async(id)=>{
        : "text-gray-500"
    }">
 ${character.status} </p>
-   <p class="text-xl text-gray-200 mb-6">Origen: ${
-     character.origin.name
-   }</p>
+   <p class="text-xl text-gray-200 mb-6">Origen: ${character.origin.name}</p>
    <p class="text-xl text-gray-200 mb-6">Ubicación: ${
      character.location.name
    }</p>
-   <p class="text-xl text-gray-200 mb-6">Aparicion: ${character.episode
-     .map((episode) => "E" + episode.split("/").pop())
-     .join(", ")}</p>
+   <p class="text-xl text-gray-200 mb-6  ">Aparicion: <a>${character.episode
+     .map((episode) => {
+       const id = episode.split("/").pop();
+       return `<span class="cursor-pointer hover:underline" onclick="showEpisodeDetail(${id})">E${id} </span>`;
+     })
+     .join(",")}</p>
    <button id="closeDetail" class="mt-4 px-4 py-2 bg-lime-400 text-white rounded">Volver</button>
  </div>  `;
   $("#closeDetail").addEventListener("click", () => {
     $detail.style.display = "none";
     $main.style.display = "block";
   });
-}
+};
 const charactersCarrousel = (characters) => {
   let carrousel = `
     <div class="flex transition-transform duration-300 ease-in-out space-x-4 overflow-x-auto p-4 bg-gray-100 rounded-lg shadow-lg">
@@ -207,6 +202,32 @@ const charactersCarrousel = (characters) => {
   return carrousel;
 };
 const updateView = async () => {
+  $containerCards.innerHTML = `<img src="./img/loanding.gif" alt="Loading..." id="loader" class="w-200 h-200 mx-auto mt-10" />`;
+
+  requestAnimationFrame(() => {
+    const loader = document.getElementById('loader');
+    if (!loader) return;
+
+    let scale = 1;
+    let zoomIn = true;
+
+    const animate = () => {
+      if (zoomIn) {
+        scale += 0.01;
+        if (scale >= 1.5) zoomIn = false;
+      } else {
+        scale -= 0.01;
+        if (scale <= 1) zoomIn = true;
+      }
+
+      loader.style.transform = `scale(${scale})`;
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  });
+ 
+  
   const data = await getPage();
   drawData(data.results);
   totalPage = data.info.pages;
@@ -220,8 +241,6 @@ const init = () => {
 init();
 
 $nextPage.addEventListener("click", () => {
-  $containerCards.innerHTML = "";
-  $containerCards.innerHTML = `<h1>Loading...</h1>`;
   page += 1;
   updateView();
   if (page == totalPage) {
@@ -232,8 +251,6 @@ $nextPage.addEventListener("click", () => {
 });
 
 $backPage.addEventListener("click", () => {
-  $containerCards.innerHTML = "";
-  $containerCards.innerHTML = `<h1>Loading...</h1>`;
   page -= 1;
   updateView();
   if (page === 1) {
@@ -256,8 +273,6 @@ $selectTipo.addEventListener("change", () => {
   $selectGender.style.display = isCharacter ? "block" : "none";
 });
 
-
-
 const NUM_GATOS = 30;
 const gatos = [];
 
@@ -265,7 +280,7 @@ for (let i = 0; i < NUM_GATOS; i++) {
   const gato = document.createElement("img");
   gato.src = `./img/gato${Math.floor(Math.random() * 2) + 1}.png`;
   gato.className = "absolute cursor-pointer rotacion-infinita";
-  
+
   const tamaño = Math.floor(Math.random() * 160) + 40;
 
   gato.style.zIndex = tamaño >= 130 ? 1 : -1;
@@ -274,14 +289,13 @@ for (let i = 0; i < NUM_GATOS; i++) {
   const x = Math.random() * (window.innerWidth - tamaño);
   const y = Math.random() * (window.innerHeight - tamaño);
 
-  const vx = (Math.random()  + 0.1) * (Math.random() < 0.5 ? 1 : -1);
-  const vy = (Math.random()  + 0.1) * (Math.random() < 0.5 ? 1 : -1);
+  const vx = (Math.random() + 0.1) * (Math.random() < 0.5 ? 1 : -1);
+  const vy = (Math.random() + 0.1) * (Math.random() < 0.5 ? 1 : -1);
 
   document.body.appendChild(gato);
 
   gatos.push({ el: gato, x, y, vx, vy, tamaño });
 }
-
 
 function moverGatos() {
   const ancho = window.innerWidth - 20;
@@ -290,7 +304,7 @@ function moverGatos() {
     document.documentElement.scrollHeight
   );
 
-  gatos.forEach(gato => {
+  gatos.forEach((gato) => {
     gato.x += gato.vx;
     gato.y += gato.vy;
 
